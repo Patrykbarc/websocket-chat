@@ -1,17 +1,20 @@
-import { useWs } from '../hooks/useWs'
+import { useChat } from '../hooks/useChat'
 
 const DEFAULT_MESSAGE_LENGTH_LIMIT = 200
 
 function App() {
-  const { input, messages, sendMessage, setInput } = useWs()
+  const { input, messages, sendMessage, setInput, isSending } = useChat()
 
   return (
     <div className="w-full h-dvh flex p-4 md:p-8">
       <div className="lg:w-3/4 xl:w-1/2 w-full mx-auto h-full border p-4 flex flex-col">
         <div className="flex-1 overflow-y-auto border p-6">
-          {messages.map((message, index) => (
-            <p className="break-all" key={index}>
-              {message}
+          {messages.map((message) => (
+            <p className="break-all" key={message.id}>
+              <span className="text-gray-500 text-sm mr-2">
+                {new Date(message.timestamp).toLocaleTimeString()}
+              </span>
+              {message.data}
             </p>
           ))}
         </div>
@@ -29,11 +32,12 @@ function App() {
             className="border w-full h-24 p-4 resize-none"
           />
           <button
-            className="border px-4 py-1 cursor-pointer bg-gray-200"
+            className="border px-4 py-1 cursor-pointer bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
             type="submit"
             onClick={sendMessage}
+            disabled={isSending || !input.trim()}
           >
-            Send
+            {isSending ? 'Sending...' : 'Send'}
           </button>
           <div className="flex justify-between">
             <p className="text-red-600">

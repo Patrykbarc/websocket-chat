@@ -15,12 +15,16 @@
     "preset": "@repo/jest-presets/node"
   },
   "dependencies": {
+    "@repo/trpc": "workspace:*",
+    "@trpc/server": "^11.0.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "express": "4.21.2",
     "morgan": "^1.10.0",
-    "ws": "^8.19.0"
+    "superjson": "^2.2.2",
+    "ws": "^8.19.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
