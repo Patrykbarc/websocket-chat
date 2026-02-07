@@ -43,15 +43,7 @@ export const appRouter = router({
 
       throw error
     }
-  }),
-
-  greeting: publicProcedure
-    .input(z.object({ name: z.string().optional() }))
-    .query(({ input }) => {
-      return {
-        message: `Hello ${input.name ?? 'World'}!`
-      }
-    })
+  })
 })
 
 export type AppRouter = typeof appRouter
