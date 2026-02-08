@@ -1,6 +1,5 @@
-import { json, urlencoded } from 'body-parser'
 import cors from 'cors'
-import express from 'express'
+import express, { json, urlencoded } from 'express'
 import { createServer as createHttpServer } from 'http'
 import morgan from 'morgan'
 import { setupTRPC, setupTRPCWebSocket } from './trpc'
