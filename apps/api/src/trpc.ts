@@ -5,9 +5,10 @@ import { applyWSSHandler } from '@trpc/server/adapters/ws'
 import type { Express } from 'express'
 import type { Server } from 'http'
 import { WebSocketServer } from 'ws'
+import { getDB } from './config/db.config.js'
 
 export function createContext(): Context {
-  return {}
+  return { db: getDB() }
 }
 
 export function setupTRPC(app: Express) {
@@ -21,7 +22,10 @@ export function setupTRPC(app: Express) {
 }
 
 export function setupTRPCWebSocket(httpServer: Server) {
-  const wss = new WebSocketServer({ server: httpServer })
+  const wss = new WebSocketServer({
+    server: httpServer,
+    path: '/trpc'
+  })
 
   applyWSSHandler({
     wss,

@@ -1,18 +1,31 @@
 import { Db, MongoClient } from 'mongodb'
 
-const connectionString = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@mongo:27017/`
+const host = process.env.MONGO_HOST
+const username = process.env.MONGO_USERNAME
+const password = process.env.MONGO_PASSWORD
+const dbName = process.env.MONGO_DB_NAME
+
+const connectionString = `mongodb://${username}:${password}@${host}:27017/`
 
 const client = new MongoClient(connectionString)
 
-let db: Db
+let db: Db | null = null
 
-try {
-  const conn = await client.connect()
-  db = conn.db('sample_training')
-  console.log('Successfully connected to MongoDB')
-} catch (e) {
-  console.error('Failed to connect to MongoDB:', e)
-  process.exit(1)
+export async function connectDB() {
+  try {
+    const conn = await client.connect()
+    db = conn.db(dbName)
+    console.log('Successfully connected to MongoDB')
+    return db
+  } catch (e) {
+    console.error('Failed to connect to MongoDB:', e)
+    throw e
+  }
 }
 
-export { db }
+export function getDB(): Db {
+  if (!db) {
+    throw new Error('Database not connected. Call connectDB() first.')
+  }
+  return db
+}

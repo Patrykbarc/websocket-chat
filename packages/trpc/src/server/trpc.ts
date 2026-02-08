@@ -1,7 +1,10 @@
 import { initTRPC } from '@trpc/server'
+import type { Db } from 'mongodb'
 import superjson from 'superjson'
 
-type Context = {}
+type Context = {
+  db?: Db
+}
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,

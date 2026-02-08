@@ -17,12 +17,16 @@ export type ChatMessage = z.infer<typeof chatMessageSchema>
 export const appRouter = router({
   sendMessage: publicProcedure
     .input(chatMessageSchema.pick({ data: true, username: true }))
-    .mutation(({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const message: ChatMessage = {
         id: crypto.randomUUID(),
         timestamp: new Date().toISOString(),
         data: input.data,
         username: input.username
+      }
+
+      if (ctx.db) {
+        await ctx.db.collection<ChatMessage>('messages').insertOne(message)
       }
 
       eventEmitter.emit('newMessage', message)
