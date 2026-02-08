@@ -10,6 +10,7 @@
     "lint": "eslint src/ --max-warnings 0"
   },
   "dependencies": {
+    "@repo/constants": "workspace:^",
     "@repo/trpc": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.62.13",

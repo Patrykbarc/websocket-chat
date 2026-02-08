@@ -1,3 +1,4 @@
+import { DEFAULT_MESSAGE_LENGTH_LIMIT } from '@repo/constants'
 import { EventEmitter, on } from 'events'
 import { z } from 'zod'
 import { publicProcedure, router } from './trpc.js'
@@ -7,14 +8,14 @@ const eventEmitter = new EventEmitter()
 const chatMessageSchema = z.object({
   id: z.string(),
   timestamp: z.string(),
-  data: z.string().max(200)
+  data: z.string().max(DEFAULT_MESSAGE_LENGTH_LIMIT)
 })
 
 export type ChatMessage = z.infer<typeof chatMessageSchema>
 
 export const appRouter = router({
   sendMessage: publicProcedure
-    .input(z.object({ data: z.string().max(200) }))
+    .input(z.object({ data: z.string().max(DEFAULT_MESSAGE_LENGTH_LIMIT) }))
     .mutation(({ input }) => {
       const message: ChatMessage = {
         id: crypto.randomUUID(),

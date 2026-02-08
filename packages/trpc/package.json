@@ -20,10 +20,11 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@trpc/server": "^11.0.0",
+    "@repo/constants": "workspace:^",
+    "@tanstack/react-query": "^5.62.13",
     "@trpc/client": "^11.0.0",
     "@trpc/react-query": "^11.0.0",
-    "@tanstack/react-query": "^5.62.13",
+    "@trpc/server": "^11.0.0",
     "superjson": "^2.2.2",
     "zod": "^3.24.1"
   },
