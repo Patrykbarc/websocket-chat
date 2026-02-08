@@ -4,7 +4,9 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
-    "dev": "turbo run dev",
+    "db:up": "docker compose -f apps/api/compose.yaml up -d",
+    "db:down": "docker compose -f apps/api/compose.yaml down",
+    "dev": "pnpm db:up && turbo run dev; pnpm db:down",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
