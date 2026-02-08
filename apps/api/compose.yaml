@@ -13,6 +13,8 @@ services:
     restart: always
     ports:
       - 8081:8081
+    depends_on:
+      - mongo
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
       ME_CONFIG_BASICAUTH_ENABLED: true
