@@ -8,19 +8,21 @@ const eventEmitter = new EventEmitter()
 const chatMessageSchema = z.object({
   id: z.string(),
   timestamp: z.string(),
-  data: z.string().max(DEFAULT_MESSAGE_LENGTH_LIMIT)
+  data: z.string().max(DEFAULT_MESSAGE_LENGTH_LIMIT),
+  username: z.string().max(50)
 })
 
 export type ChatMessage = z.infer<typeof chatMessageSchema>
 
 export const appRouter = router({
   sendMessage: publicProcedure
-    .input(z.object({ data: z.string().max(DEFAULT_MESSAGE_LENGTH_LIMIT) }))
+    .input(chatMessageSchema.pick({ data: true, username: true }))
     .mutation(({ input }) => {
       const message: ChatMessage = {
         id: crypto.randomUUID(),
         timestamp: new Date().toISOString(),
-        data: input.data
+        data: input.data,
+        username: input.username
       }
 
       eventEmitter.emit('newMessage', message)

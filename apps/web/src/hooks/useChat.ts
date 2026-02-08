@@ -1,10 +1,13 @@
+import { SESSION_USERNAME_KEY } from '@repo/constants'
 import type { ChatMessage } from '@repo/trpc/server'
 import { useCallback, useState } from 'react'
 import { trpc } from '../utils/trpc'
+import { useSessionStorage } from './useSessionStorage'
 
 export function useChat() {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [username] = useSessionStorage(SESSION_USERNAME_KEY)
 
   trpc.onMessage.useSubscription(undefined, {
     onData: (message) => {
@@ -18,16 +21,16 @@ export function useChat() {
   const sendMessageMutation = trpc.sendMessage.useMutation()
 
   const sendMessage = useCallback(() => {
-    if (!input.trim()) return
+    if (!input.trim() || !username) return
 
     sendMessageMutation.mutate(
-      { data: input },
+      { data: input, username },
       {
         onSuccess: () => setInput(''),
         onError: (err) => console.error('Send error:', err)
       }
     )
-  }, [input, sendMessageMutation])
+  }, [input, username, sendMessageMutation])
 
   return {
     messages,
