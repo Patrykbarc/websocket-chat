@@ -1,7 +1,15 @@
 import { SESSION_USERNAME_KEY } from '@repo/constants'
+import { lazy } from 'react'
 import { useSessionStorage } from '../hooks/useSessionStorage'
-import { Chat } from '../ui/components/chat'
-import { UsernamePrompt } from '../ui/components/username-prompt'
+
+const Chat = lazy(() =>
+  import('../ui/components/chat').then((module) => ({ default: module.Chat }))
+)
+const UsernamePrompt = lazy(() =>
+  import('../ui/components/username-prompt').then((module) => ({
+    default: module.UsernamePrompt
+  }))
+)
 
 function App() {
   const [isUsernameSet] = useSessionStorage(SESSION_USERNAME_KEY)

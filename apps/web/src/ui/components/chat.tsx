@@ -1,12 +1,32 @@
 import { DEFAULT_MESSAGE_LENGTH_LIMIT } from '@repo/constants'
+import { useCallback, useEffect, useRef } from 'react'
 import { useChat } from '../../hooks/useChat'
 
 export function Chat() {
   const { input, messages, sendMessage, setInput, isSending } = useChat()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isAtBottomRef = useRef(true)
+
+  const handleScroll = useCallback(() => {
+    const el = containerRef.current
+    if (!el) return
+    isAtBottomRef.current =
+      el.scrollHeight - el.scrollTop - el.clientHeight < 32
+  }, [])
+
+  useEffect(() => {
+    if (isAtBottomRef.current) {
+      containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight })
+    }
+  }, [messages])
 
   return (
     <>
-      <div className="flex-1 space-y-1.5 overflow-y-auto border p-6 divide-y divide-gray-200">
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="flex-1 space-y-1.5 overflow-y-auto border p-6 divide-y divide-gray-200"
+      >
         {messages.map((message) => (
           <p
             className="break-all flex items-end justify-between w-full pb-1.5"

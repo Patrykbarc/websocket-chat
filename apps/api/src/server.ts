@@ -2,6 +2,8 @@ import cors from 'cors'
 import express, { json, urlencoded } from 'express'
 import { createServer as createHttpServer } from 'http'
 import morgan from 'morgan'
+import { corsConfig } from './config/cors.config'
+import { router } from './routes/routes'
 import { setupTRPC, setupTRPCWebSocket } from './trpc'
 
 export const createServer = () => {
@@ -13,7 +15,8 @@ export const createServer = () => {
     .use(morgan('dev'))
     .use(urlencoded({ extended: true }))
     .use(json())
-    .use(cors())
+    .use(cors(corsConfig))
+    .use(router)
 
   setupTRPC(app)
   setupTRPCWebSocket(httpServer)

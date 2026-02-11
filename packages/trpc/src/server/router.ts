@@ -15,6 +15,12 @@ const chatMessageSchema = z.object({
 export type ChatMessage = z.infer<typeof chatMessageSchema>
 
 export const appRouter = router({
+  getMessages: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.db) return []
+
+    return ctx.db.collection<ChatMessage>('messages').find().toArray()
+  }),
+
   sendMessage: publicProcedure
     .input(chatMessageSchema.pick({ data: true, username: true }))
     .mutation(async ({ input, ctx }) => {
